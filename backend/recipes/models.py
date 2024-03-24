@@ -69,12 +69,12 @@ class Recipe(models.Model):
     #     null=True,
     #     default=None
     # )
-    # ingredients = models.ManyToManyField(
-    #     Ingredient,
-    #     through='RecipeIngredient',
-    #     related_name='recipes',
-    #     verbose_name='Ингредиенты'
-    # )
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        through='RecipeIngredient',
+        related_name='recipes',
+        verbose_name='Ингредиенты'
+    )
 
     # class Meta:
     #     ordering = ('-pub_date',)

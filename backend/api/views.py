@@ -5,18 +5,14 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
-from .serializers import (IngredientSerializer, RecipeIngredientSerializer,
+from .permissions import IsAdminOrReadOnly
+from .serializers import (IngredientSerializer, RecipeIngredientReadSerializer,
                           RecipeReadSerializer, RecipeWriteSerializer,
                           TagSerializer)
 
 
 class RecipePagination(PageNumberPagination):
     page_size = 2
-
-
-class RecipeIngredientSerializer(viewsets.ModelViewSet):
-    queryset = RecipeIngredient.objects.all()
-    serializer_class = RecipeIngredientSerializer
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -29,13 +25,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeReadSerializer
         return RecipeWriteSerializer
 
-class IngredientViewSet(viewsets.ModelViewSet):
+
+class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = (IsAdminOrReadOnly,)
     # permission_classes = ()
     # filter_backends = []
