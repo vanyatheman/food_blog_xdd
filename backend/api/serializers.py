@@ -13,7 +13,7 @@ User = get_user_model()
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     def __init__(self, instance=None, data=..., **kwargs):
-        print("DEBUG in serializers")
+        print(">>> DEBUG in create user serializers")
         super().__init__(instance, data, **kwargs)
 
     class Meta:
@@ -30,13 +30,14 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 class CustomUserSerializer(UserSerializer):
     """."""
 
-    def __init__(self, instance=None, data=..., **kwargs):
-        print(">>> DEBUG in users serializers")
-        super().__init__(instance, data, **kwargs)
+    # def __init__(self, instance=None, data=..., **kwargs):
+    #     print(">>> DEBUG in users serializers")
+    #     super().__init__(instance, data, **kwargs)
 
     # is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
+        print(">>> asd")
         model = User
         fields = (
             'email',
@@ -117,7 +118,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     """Сериализатор модели Recipe для безопасных методов."""
 
     tags = TagSerializer(many=True, read_only =True)
-    # author = CustomUserSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     ingredients = RecipeIngredientReadSerializer(
         many=True,
         read_only=True,
@@ -132,7 +133,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'tags',
-            # 'author',
+            'author',
             'ingredients',
             # 'is_favorited',
             # 'is_in_shopping_cart',
@@ -148,13 +149,14 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
     ingredients = RecipeIngredientWriteSerializer(many=True)
+    author = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = Recipe
         fields = (
             'id',
             'tags',
-            # 'author',
+            'author',
             'ingredients',
             # 'is_favorited',
             # 'is_in_shopping_cart',
@@ -167,12 +169,10 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
-        # print(">>> ", validated_data, ingredients)
         recipe = Recipe.objects.create(**validated_data)
         for ingredient in ingredients:
             amount = ingredient['amount']
             current_ingredient = ingredient['id']
-            # print(">>> ", f"current_ingredient = {current_ingredient}, amount = {amount}")
             RecipeIngredient.objects.create(
                 ingredient=current_ingredient,
                 recipe=recipe,
@@ -180,7 +180,9 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             )
         recipe.tags.set(tags)
         return recipe
+    
 
     def to_representation(self, instance):
-        serializer = RecipeReadSerializer(instance)
-        return serializer.data
+        request = self.context.get('request')
+        context = {'request': request}
+        return RecipeReadSerializer(instance, context=context).data

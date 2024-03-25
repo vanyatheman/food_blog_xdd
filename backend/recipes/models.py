@@ -57,13 +57,13 @@ class Recipe(models.Model):
     text = models.TextField(
         verbose_name='Описание рецепта'
     )
-    # author = models.ForeignKey(
-    #     User,
-    #     on_delete=models.CASCADE,
-    #     related_name='recipes',
-    #     verbose_name='Автор рецепта',
-    #     db_index=True,
-    # )
+    author = models.ForeignKey(
+        User,
+        related_name='recipes',
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name='Автор',
+    )
     # image = models.ImageField(
     #     upload_to='recipes/images/',
     #     null=True,

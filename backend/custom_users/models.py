@@ -6,6 +6,13 @@ from .validators import username_validator
 
 class User(AbstractUser):
     """Модель пользователя."""
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [
+        'id',
+        'username',
+        'first_name',
+        'last_name',
+    ]
     email = models.EmailField(verbose_name='email', max_length=256, unique=True)
     username = models.CharField(
         verbose_name='username',
