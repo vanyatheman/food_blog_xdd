@@ -1,14 +1,57 @@
 import base64
 from pprint import pprint
 
+from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
-from django.core.files.base import ContentFile
-from recipes.models import Recipe, Ingredient, Tag, RecipeIngredient
 
+from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
+
+User = get_user_model()
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    def __init__(self, instance=None, data=..., **kwargs):
+        print("DEBUG in serializers")
+        super().__init__(instance, data, **kwargs)
+
+    class Meta:
+        model = User
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            User.USERNAME_FIELD,
+            'password',
+        )
+
+    # def to_representation(self, instance):
+    #     serializer = CustomUserSerializer(instance)
+    #     return serializer.data
 
 class CustomUserSerializer(UserSerializer):
     """."""
+
+    def __init__(self, instance=None, data=..., **kwargs):
+        print(">>> DEBUG in users serializers")
+        super().__init__(instance, data, **kwargs)
+
+    # is_subscribed = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            # 'is_subscribed',
+        )
+
+    # def get_is_subscribed(self, obj):
+    #     user = self.context.get('request').user
+    #     if user.is_anonymous:
+    #         return False
+    #     return Subscribe.objects.filter(user=user, author=obj).exists()
 
 
 class Base64ImageField(serializers.ImageField):
