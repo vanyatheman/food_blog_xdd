@@ -1,5 +1,9 @@
-from datetime import timedelta
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,13 +20,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'djoser',
+
     'custom_users.apps.CustomUsersConfig',
     'recipes.apps.RecipesConfig',
     'api.apps.ApiConfig',
-    'djoser',
+
 ]
 
 MIDDLEWARE = [
@@ -37,10 +44,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
+TEMPLATES_DIR = BASE_DIR / 'templates'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,7 +68,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    # 'default': {
+    #     'ENGINE': os.getenv('DB_ENGINE'),
+    #     'NAME': os.getenv('POSTGRES_DB'),
+    #     'USER': os.getenv('POSTGRES_USER'),
+    #     'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+    #     'HOST': os.getenv('DB_HOST'),
+    #     'PORT': os.getenv('DB_PORT')
+    # }
 }
 
 AUTH_USER_MODEL = 'custom_users.User'
@@ -90,34 +107,28 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+# STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 2,
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
+        'rest_framework.permissions.AllowAny', 
     ],
-
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
 
-# SIMPLE_JWT = {
-#    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-#    'AUTH_HEADER_TYPES': ('Bearer',),
-# }
-
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'api.serializers.CustomUserCreateSerializer',
         'user': 'api.serializers.CustomUserSerializer',
-        # 'current_user': 'api.serializers.CustomUserSerializer',
+        'current_user': 'api.serializers.CustomUserSerializer',
     },
 
     'PERMISSIONS': {

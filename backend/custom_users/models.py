@@ -8,7 +8,6 @@ class User(AbstractUser):
     """Модель пользователя."""
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
-        'id',
         'username',
         'first_name',
         'last_name',
