@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
@@ -5,6 +6,16 @@ from django.db.models import Model
 from recipes.models import Recipe
 from custom_users.models import User
 
+
+def get_user_recipe(request, pk, model: Model):
+    user = request.user
+    recipe = get_object_or_404(Recipe, id=pk)
+    exist: bool = model.objects.filter(
+        user=user,
+        recipe=recipe
+    ).exists()
+
+    return user, recipe, exist
 
 
 def add_recipe(

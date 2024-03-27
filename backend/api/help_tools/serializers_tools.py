@@ -20,6 +20,7 @@ class Base64ImageField(serializers.ImageField):
 
 def add_ingredients(ingredients, recipe):
     """Добавить ингредиенты."""
+
     ingredients_query_list = [
         RecipeIngredient(
             recipe=recipe,

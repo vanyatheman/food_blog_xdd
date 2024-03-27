@@ -68,14 +68,6 @@ class SubscribeSerializer(CustomUserSerializer):
                 detail='Нельзя подписываться на самого себя.',
                 code=status.HTTP_400_BAD_REQUEST
             )
-        subscribtion_exist = Subscribe.objects.filter(
-            author=author, user=user
-        ).exists()
-        if subscribtion_exist:
-            raise ValidationError(
-                detail='Вы уже подписаны на этого пользователя!',
-                code=status.HTTP_400_BAD_REQUEST
-            )
         return data
 
 
@@ -138,7 +130,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         read_only=True,
         source="recipe_ingredients",
     )
-    # image = Base64ImageField()
+    image = Base64ImageField()
     is_favorited = serializers.SerializerMethodField(read_only=True)
     is_in_shopping_cart  = serializers.SerializerMethodField(read_only=True)
 
@@ -152,7 +144,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
             'is_favorited',
             'is_in_shopping_cart',
             'name',
-            # 'image',
+            'image',
             'text',
             'cooking_time',
         )
@@ -180,7 +172,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
     ingredients = RecipeIngredientWriteSerializer(many=True)
     author = CustomUserSerializer(read_only=True)
-    # image = Base64ImageField()
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
@@ -189,7 +181,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             'tags',
             'author',
             'ingredients',
-            # 'image',
+            'image',
             'name',
             'text',
             'cooking_time',
@@ -249,13 +241,13 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 class RecipeShortSerializator(serializers.ModelSerializer):
     """Для ответа на пост запросы на url избранного и корзины."""
     
-    # image = Base64ImageField()
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
         fields = (
             'id',
             'name',
-            # 'image',
+            'image',
             'cooking_time',
         )

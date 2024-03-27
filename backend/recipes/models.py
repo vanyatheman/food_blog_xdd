@@ -76,11 +76,10 @@ class Recipe(models.Model):
         null=True,
         verbose_name='Автор',
     )
-    # image = models.ImageField(
-    #     upload_to='recipes/images/',
-    #     null=True,
-    #     default=None
-    # )
+    image = models.ImageField(
+        'Изображение',
+        upload_to='recipes/'
+    )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
