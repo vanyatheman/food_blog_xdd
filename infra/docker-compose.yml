@@ -1,6 +1,22 @@
 version: '3.3'
 services:
-
+  db:
+    image: postgres:13.10
+    env_file: ./.env
+    volumes:
+      - pg_data:/vat/lib/postgresql/data
+    ports:
+      - "5434:5432"
+  backend:
+    build: 
+      context: ../backend
+      dockerfile: Dockerfile
+    env_file: ./.env
+    volumes:
+      - static:/backend_static
+      - media:/app/media/
+    depends_on:
+      - db
   frontend:
     build:
       context: ../frontend
@@ -15,3 +31,15 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
+      - static:/var/html/static/
+      - media:/var/html/media/
+      - redoc:/usr/share/nginx/html/api/docs/
+    depends_on:
+      - backend
+
+
+volumes:
+  static:
+  media:
+  pg_data:
+  redoc:
