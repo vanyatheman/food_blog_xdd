@@ -74,11 +74,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         user = request.user
-        if not user.shopping_cart.exists():
+        if not user.carts.exists():
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         ingredients = RecipeIngredient.objects.filter(
-            recipe__shopping_cart__user=request.user
+            recipe__carts__user=user
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
@@ -96,7 +96,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             for ingredient in ingredients
         ])
 
-        filename = f"Shopping_list-_-{today}.txt"
+        filename = f"Shopping_list-_-{today:%Y-%m-%d}.txt"
         response = HttpResponse(shopping_list, content_type='text/plain')
         response['Content-Disposition'] = f"attachment; filename={filename}"
 

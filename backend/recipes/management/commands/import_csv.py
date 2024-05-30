@@ -16,19 +16,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for model, base in DICT.items():
-            with open(
-                f'D:/Dev/foodgram-project-react/data/{base}',
-                'r',
-                encoding='utf-8'
-            ) as csv_file:
+            with open(  f'data/{base}', 'r', encoding='utf-8') as csv_file:
                 reader = csv.DictReader(csv_file)
 
                 objs_to_create = []
                 for data in reader:
-                    # if model.objects.filter(id=data['id']).exists():
-                    #     raise Exception(
-                    #         'БД не пустая, удалите БД и сделайте миграции.'
-                    #     )
                     obj = model(**data)
                     objs_to_create.append(obj)
                 model.objects.bulk_create(objs_to_create)
