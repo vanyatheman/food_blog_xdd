@@ -52,5 +52,3 @@ docker compose stop         # без удаления
 
 - После запуска проект будут доступен по адресу: [http://localhost/](http://localhost/)
 
-
-- Документация будет доступна по адресу: [http://localhost/api/docs/](http://localhost/api/docs/)
