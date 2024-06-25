@@ -1,54 +1,51 @@
-# food_blog_xdd
-Фуд блог с рецептами и подпиской, избранными блюдами и списком для покупок
+Food Blog with Recipes, Subscription, Favorite Dishes, and Shopping List
+Project Launch on Local Machine:
+Clone the Repository:
 
-### Запуск проекта на локальной машине:
+```bash
+git clone https://github.com/vanyatheman/food_blog_xdd.git
+```
+Create a .env File in the infra Directory:
+Fill it with your own data based on the example provided in example.env:
 
-- Клонировать репозиторий:
-```
-https://github.com/vanyatheman/food_blog_xdd.git
-```
-
-- В директории infra создать файл .env и заполнить своими данными по аналогии с example.env:
-```
+```bash
 DB_ENGINE=django.db.backends.postgresql
 POSTGRES_DB=postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 DB_HOST=db
 DB_PORT=5434
-SECRET_KEY='секретный ключ Django'
+SECRET_KEY='your Django secret key'
 ```
+Create and Start Docker Containers:
 
-- Создать и запустить контейнеры Docker
-```
+```bash
 docker compose up -d
 ```
+After Successful Build, Apply Migrations:
 
-После успешной сборки выполнить миграции:
-```
+```bash
 docker compose exec backend python manage.py migrate
 ```
+Create a Superuser:
 
-- Создать суперпользователя:
-```
+```bash
 docker compose exec backend python manage.py createsuperuser
 ```
+Collect Static Files:
 
-- Собрать статику:
-```
+```bash
 docker compose exec backend python manage.py collectstatic --noinput
 ```
+Populate the Database with Content from backend/data/ingredients.json:
 
-- Наполнить базу данных содержимым из файла backend/data/ingredients.json:
-```
+```bash
 docker compose exec backend python manage.py import_csv
 ```
+To Stop Docker Containers:
 
-- Для остановки контейнеров Docker:
+```bash
+docker compose down -v      # with deletion
+docker compose stop         # without deletion
 ```
-docker compose down -v      # с их удалением
-docker compose stop         # без удаления
-```
-
-- После запуска проект будут доступен по адресу: [http://localhost/](http://localhost/)
-
+After launching, the project will be available at: http://localhost/
