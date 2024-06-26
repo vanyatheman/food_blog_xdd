@@ -1,23 +1,23 @@
 openapi: 3.0.2
 info:
-  title: 'xdd'
+  title: 'xdd-food'
   version: ''
 paths:
   /api/users/:
     get:
-      operationId: Список пользователей
+      operationId: Users list
       description: ''
       parameters:
         - name: page
           required: false
           in: query
-          description: Номер страницы.
+          description: Page number.
           schema:
             type: integer
         - name: limit
           required: false
           in: query
-          description: Количество объектов на странице.
+          description: Amount of objects on page.
           schema:
             type: integer
       responses:
@@ -30,27 +30,27 @@ paths:
                   count:
                     type: integer
                     example: 123
-                    description: 'Общее количество объектов в базе'
+                    description: 'Total number of objects in the database'
                   next:
                     type: string
                     nullable: true
                     format: uri
-                    example: http://xdd.example.org/api/users/?page=4
-                    description: 'Ссылка на следующую страницу'
+                    example: http://xdd-food.example.org/api/users/?page=4
+                    description: 'Link to next page'
                   previous:
                     type: string
                     nullable: true
                     format: uri
-                    example: http://xdd.example.org/api/users/?page=2
-                    description: 'Ссылка на предыдущую страницу'
+                    example: http://xdd-food.example.org/api/users/?page=2
+                    description: 'Link to previous page'
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
-                    description: 'Список объектов текущей страницы'
+                    description: 'List of current page objects'
           description: ''
       tags:
-        - Пользователи
+        - Users
     post:
       operationId: Регистрация пользователя
       description: ''
@@ -70,10 +70,10 @@ paths:
         '400':
           $ref: '#/components/responses/ValidationError'
       tags:
-        - Пользователи
+        - Users
   /api/tags/:
     get:
-      operationId: Cписок тегов
+      operationId: List of tags
       description: ''
       parameters: []
       responses:
@@ -86,10 +86,10 @@ paths:
                   $ref: '#/components/schemas/Tag'
           description: ''
       tags:
-        - Теги
+        - Tag
   /api/tags/{id}/:
     get:
-      operationId: Получение тега
+      operationId: Receiving a tag
       description: ''
       parameters:
         - name: id
@@ -166,24 +166,24 @@ paths:
                   count:
                     type: integer
                     example: 123
-                    description: 'Общее количество объектов в базе'
+                    description: 'Total number of objects in the database'
                   next:
                     type: string
                     nullable: true
                     format: uri
-                    example: http://xdd.example.org/api/recipes/?page=4
-                    description: 'Ссылка на следующую страницу'
+                    example: http://xdd-food.example.org/api/recipes/?page=4
+                    description: 'Link to next page'
                   previous:
                     type: string
                     nullable: true
                     format: uri
-                    example: http://xdd.example.org/api/recipes/?page=2
-                    description: 'Ссылка на предыдущую страницу'
+                    example: http://xdd-food.example.org/api/recipes/?page=2
+                    description: 'Link to previous page'
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/RecipeList'
-                    description: 'Список объектов текущей страницы'
+                    description: 'List of current page objects'
           description: ''
       tags:
         - Рецепты
@@ -454,7 +454,7 @@ paths:
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
-        - Пользователи
+        - Users
   /api/users/me/:
     get:
       operationId: Текущий пользователь
@@ -472,7 +472,7 @@ paths:
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
-        - Пользователи
+        - Users
   /api/users/subscriptions/:
     get:
       operationId: Мои подписки
@@ -506,24 +506,24 @@ paths:
                   count:
                     type: integer
                     example: 123
-                    description: 'Общее количество объектов в базе'
+                    description: 'Total number of objects in the database'
                   next:
                     type: string
                     nullable: true
                     format: uri
-                    example: http://xdd.example.org/api/users/subscriptions/?page=4
-                    description: 'Ссылка на следующую страницу'
+                    example: http://xdd-food.example.org/api/users/subscriptions/?page=4
+                    description: 'Link to next page'
                   previous:
                     type: string
                     nullable: true
                     format: uri
-                    example: http://xdd.example.org/api/users/subscriptions/?page=2
-                    description: 'Ссылка на предыдущую страницу'
+                    example: http://xdd-food.example.org/api/users/subscriptions/?page=2
+                    description: 'Link to previous page'
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/UserWithRecipes'
-                    description: 'Список объектов текущей страницы'
+                    description: 'List of current page objects'
           description: ''
         '401':
           $ref: '#/components/responses/AuthenticationError'
@@ -655,7 +655,7 @@ paths:
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
-        - Пользователи
+        - Users
   /api/auth/token/login/:
     post:
       operationId: Получить токен авторизации
@@ -674,7 +674,7 @@ paths:
                 $ref: '#/components/schemas/TokenGetResponse'
           description: ''
       tags:
-        - Пользователи
+        - Users
   /api/auth/token/logout/:
     post:
       operationId: Удаление токена
@@ -694,7 +694,7 @@ paths:
         '401':
           $ref: '#/components/responses/AuthenticationError'
       tags:
-        - Пользователи
+        - Users
 components:
   schemas:
     User:
@@ -825,7 +825,7 @@ components:
           description: 'Название'
         image:
           description: 'Ссылка на картинку на сайте'
-          example: 'http://xdd.example.org/media/recipes/images/image.jpeg'
+          example: 'http://xdd-food.example.org/media/recipes/images/image.jpeg'
           type: string
           format: url
         text:
@@ -857,7 +857,7 @@ components:
           description: 'Название'
         image:
           description: 'Ссылка на картинку на сайте'
-          example: 'http://xdd.example.org/media/recipes/images/image.jpeg'
+          example: 'http://xdd-food.example.org/media/recipes/images/image.jpeg'
           type: string
           format: url
         cooking_time:

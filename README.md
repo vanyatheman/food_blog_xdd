@@ -24,23 +24,10 @@ docker compose up -d
 ```
 After Successful Build, Apply Migrations:
 
-```bash
-docker compose exec backend python manage.py migrate
-```
 Create a Superuser:
 
 ```bash
 docker compose exec backend python manage.py createsuperuser
-```
-Collect Static Files:
-
-```bash
-docker compose exec backend python manage.py collectstatic --noinput
-```
-Populate the Database with Content from backend/data/ingredients.json:
-
-```bash
-docker compose exec backend python manage.py import_csv
 ```
 To Stop Docker Containers:
 
